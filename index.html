@@ -4,63 +4,118 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cassie's Personal Library</title>
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary: #b83260;
+      --secondary: #85495e;
+      --bg-gradient-start: #fdf6f9;
+      --bg-gradient-end: #f3f0ea;
+      --card-bg: #ffffff;
+      --text-color: #333;
+      --shadow-color: rgba(0, 0, 0, 0.1);
+    }
+    * {
+      box-sizing: border-box;
+    }
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom, #fdf6f9, #f3f0ea);
+      margin: 0;
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(to bottom, var(--bg-gradient-start), var(--bg-gradient-end));
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
       padding: 40px 20px;
-      text-align: center;
-      color: #333;
     }
     h1 {
-      color: #b83260;
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary);
       margin-bottom: 10px;
     }
-    h2 {
-      color: #85495e;
-      margin-top: 40px;
+    .library-section {
+      background: var(--card-bg);
+      padding: 20px;
+      margin: 30px 0;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px var(--shadow-color);
+    }
+    .library-section h2 {
+      color: var(--secondary);
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      border-bottom: 2px solid var(--primary);
+      display: inline-block;
+      padding-bottom: 5px;
     }
     .shelf {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-top: 20px;
-      gap: 15px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 20px;
+      justify-items: center;
     }
     .book {
-      width: 120px;
-      height: 180px;
+      width: 140px;
+      height: 210px;
       background-color: #eee;
       background-size: cover;
       background-position: center;
       border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 10px var(--shadow-color);
       transition: transform 0.2s, box-shadow 0.2s;
       cursor: pointer;
+      position: relative;
     }
     .book:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 8px 20px var(--shadow-color);
     }
-    .popup {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
+    form {
+      background: var(--card-bg);
       padding: 25px;
       border-radius: 10px;
-      width: 300px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      display: none;
-      z-index: 10;
-      text-align: left;
+      box-shadow: 0 4px 15px var(--shadow-color);
+      margin: 40px auto;
+      max-width: 400px;
     }
-    .popup img {
-      width: 100%;
-      height: auto;
-      margin-top: 15px;
+    form h3 {
+      color: var(--primary);
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    input[type="text"], input[type="date"], select {
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
       border-radius: 5px;
+      width: 100%;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px;
+      width: 100%;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      background-color: var(--primary);
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    button:hover {
+      background-color: var(--secondary);
     }
     .overlay {
       position: fixed;
@@ -68,122 +123,107 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0,0,0,0.5);
+      background-color: rgba(0,0,0,0.6);
       display: none;
-      z-index: 5;
+      z-index: 100;
     }
-    form {
-      margin-top: 50px;
-      background: white;
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--card-bg);
       padding: 25px;
       border-radius: 10px;
+      width: 90%;
       max-width: 400px;
-      margin-left: auto;
-      margin-right: auto;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 10px 30px var(--shadow-color);
+      display: none;
+      z-index: 101;
+      text-align: left;
     }
-    form h3 {
-      color: #b83260;
+    .popup h2 {
+      margin-top: 0;
+      color: var(--primary);
+      font-size: 1.4rem;
     }
-    input, select, button {
-      margin-top: 12px;
-      padding: 10px;
+    .popup p {
+      margin: 8px 0;
+    }
+    .popup img {
       width: 100%;
-      font-size: 14px;
+      height: auto;
+      margin-top: 15px;
       border-radius: 5px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-    }
-    button {
-      background-color: #b83260;
-      color: white;
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #a02852;
     }
   </style>
 </head>
 <body>
-  <h1>Cassie's Personal Library</h1>
+  <div class="container">
+    <h1>Cassie's Personal Library</h1>
 
-  <h2>Currently Reading</h2>
-  <div class="shelf" id="currentlyReadingShelf"></div>
+    <section class="library-section">
+      <h2>Currently Reading</h2>
+      <div class="shelf" id="currentlyReadingShelf"></div>
+    </section>
 
-  <h2>Finished</h2>
-  <div class="shelf" id="finishedShelf"></div>
+    <section class="library-section">
+      <h2>Finished</h2>
+      <div class="shelf" id="finishedShelf"></div>
+    </section>
 
-  <h2>Want to Read</h2>
-  <div class="shelf" id="wantToReadShelf"></div>
+    <section class="library-section">
+      <h2>Want to Read</n2>
+      <div class="shelf" id="wantToReadShelf"></div>
+    </section>
 
-  <form action="https://formsubmit.co/johnnyaiello219@gmail.com" method="POST" enctype="multipart/form-data">
-    <h3>Add a New Book</h3>
-    <input type="text" name="title" placeholder="Book Title" required>
-    <input type="text" name="author" placeholder="Author" required>
-    <select name="status" required>
-      <option value="want to read">Want to Read</option>
-      <option value="currently reading">Currently Reading</option>
-      <option value="finished">Finished</option>
-    </select>
-    <input type="date" name="startDate" placeholder="Start Date">
-    <input type="date" name="endDate" placeholder="Finish Date">
-    <input type="hidden" name="_subject" value="New Book Added to Her Library">
-    <button type="submit">Add Book</button>
-  </form>
+    <form action="https://formsubmit.co/johnnyaiello219@gmail.com" method="POST" enctype="multipart/form-data">
+      <h3>Add a New Book</h3>
+      <input type="text" name="title" placeholder="Book Title" required>
+      <input type="text" name="author" placeholder="Author" required>
+      <select name="status" required>
+        <option value="want to read">Want to Read</option>
+        <option value="currently reading">Currently Reading</option>
+        <option value="finished">Finished</option>
+      </select>
+      <div class="form-grid">
+        <input type="date" name="startDate" placeholder="Start Date">
+        <input type="date" name="endDate" placeholder="Finish Date">
+      </div>
+      <input type="hidden" name="_subject" value="New Book Added to Her Library">
+      <button type="submit">Add Book</button>
+    </form>
 
-  <div class="overlay" id="overlay" onclick="closePopup()"></div>
-  <div class="popup" id="popup">
-    <h2 id="popupTitle"></h2>
-    <p><strong>Author:</strong> <span id="popupAuthor"></span></p>
-    <p><strong>Status:</strong> <span id="popupStatus"></span></p>
-    <p><strong>Started:</strong> <span id="popupStart"></span></p>
-    <p><strong>Finished:</strong> <span id="popupEnd"></span></p>
-    <img id="popupCover" src="" alt="Cover">
+    <div class="overlay" id="overlay" onclick="closePopup()"></div>
+    <div class="popup" id="popup">
+      <h2 id="popupTitle"></h2>
+      <p><strong>Author:</strong> <span id="popupAuthor"></span></p>
+      <p><strong>Status:</strong> <span id="popupStatus"></span></p>
+      <p><strong>Started:</strong> <span id="popupStart"></span></p>
+      <p><strong>Finished:</strong> <span id="popupEnd"></span></p>
+      <img id="popupCover" src="" alt="Cover">
+    </div>
   </div>
 
   <script>
     const books = [
-      {
-        title: "Onyx Storm",
-        author: "Rebecca Yarros",
-        status: "want to read",
-        cover: "OnyxStorm.jpg",
-        startDate: "",
-        endDate: ""
-      },
-      {
-        title: "Fourth Wing",
-        author: "Rebecca Yarros",
-        status: "finished",
-        cover: "FourthWing.jpg",
-        startDate: "2025-04-25",
-        endDate: "2025-04-30"
-      },
-      {
-        title: "Iron Flame",
-        author: "Rebecca Yarros",
-        status: "currently reading",
-        cover: "IronFlame.jpg",
-        startDate: "2025-05-01",
-        endDate: "--"
-      }
+      { title: "Onyx Storm", author: "Rebecca Yarros", status: "want to read", cover: "OnyxStorm.jpg", startDate: "", endDate: "" },
+      { title: "Fourth Wing", author: "Rebecca Yarros", status: "finished", cover: "FourthWing.jpg", startDate: "2025-04-25", endDate: "2025-04-30" },
+      { title: "Iron Flame", author: "Rebecca Yarros", status: "currently reading", cover: "IronFlame.jpg", startDate: "2025-05-01", endDate: "--" }
     ];
 
-    books.forEach((book) => {
+    books.forEach(book => {
       const div = document.createElement('div');
       div.className = 'book';
       div.style.backgroundImage = `url(${book.cover})`;
       div.onclick = () => showPopup(book);
 
-      if (book.status === 'want to read') {
-        document.getElementById('wantToReadShelf').appendChild(div);
-      } else if (book.status === 'currently reading') {
-        document.getElementById('currentlyReadingShelf').appendChild(div);
-      } else if (book.status === 'finished') {
-        document.getElementById('finishedShelf').appendChild(div);
-      }
+      const shelfMap = {
+        'want to read': 'wantToReadShelf',
+        'currently reading': 'currentlyReadingShelf',
+        'finished': 'finishedShelf'
+      };
+      document.getElementById(shelfMap[book.status]).appendChild(div);
     });
 
     function showPopup(book) {
